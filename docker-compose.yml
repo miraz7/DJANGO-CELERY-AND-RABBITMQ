@@ -1,0 +1,37 @@
+version: "3"
+ 
+services:
+
+  rabbitmq3:
+      container_name: "rabbitmq"
+      image: rabbitmq:3.8-management-alpine
+      env_file:
+        - .env
+      ports:
+          # AMQP protocol port
+          - '5674:5672'
+          # HTTP management UI
+          - '15674:15672'
+  app:
+    container_name: "DJANGO-DEMO"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/app/src
+    ports:
+      - 8010:8000
+    env_file:
+      - .env
+
+  # worker:
+  #   container_name: "mye-mims-worker"
+  #   build: .
+  #   command: "celery -A evident_payment -l INFO"
+
+  #   volumes:
+  #     - ./src:/src
+  #   env_file:
+  #     - .env
+
+
